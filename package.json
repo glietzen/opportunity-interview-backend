@@ -1,0 +1,31 @@
+{
+  "name": "opportunity-interview-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/glietzen/opportunity-interview-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/glietzen/opportunity-interview-backend/issues"
+  },
+  "homepage": "https://github.com/glietzen/opportunity-interview-backend#readme",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "openai": "^6.15.0",
+    "querystring": "^0.2.1",
+    "ws": "^8.19.0",
+    "zod": "^4.3.5",
+    "zod-to-json-schema": "^3.25.1"
+  }
+}
