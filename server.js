@@ -129,6 +129,10 @@ Infer from context; if no competitors or objections, use empty arrays. Output on
     res.status(500).json({ error: 'Failed to process transcript' });
   }
 });
+// Health check endpoint for Heroku and basic access
+app.get('/', (req, res) => {
+  res.send('Opportunity Interview Backend is running');
+});
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
   console.log(`Server listening on port ${port}`);
