@@ -84,7 +84,7 @@ wss.on('connection', (ws) => {
 // Endpoint to process transcript with xAI for JSON output
 app.post('/process-transcript', async (req, res) => {
   const { transcript, model } = req.body;
-  const selectedModel = model || 'grok-4'; // Use 'grok-beta' or update to 'grok-4' if available
+  const selectedModel = model || 'grok-4-0709'; // Updated to a current model
 
   if (!transcript) {
     return res.status(400).json({ error: 'Transcript is required' });
@@ -155,7 +155,7 @@ Output only the JSON object matching the schema; no additional text.`
 
     res.json(jsonOutput);
   } catch (error) {
-    console.error('Error processing transcript with xAI:', error);
+    console.error('Error processing transcript with xAI:', error.stack); // Enhanced logging
     res.status(500).json({ error: 'Failed to process transcript' });
   }
 });
