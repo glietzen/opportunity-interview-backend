@@ -123,13 +123,13 @@ app.post('/process-transcript', async (req, res) => {
 
 Extract from the transcript:
 - transcript: The full transcript as-is.
-- competitors: Array of objects for each unique competitor mentioned. Each object must have a 'name' property with the competitor's name (e.g., [{"name": "Salesforce"}, {"name": "HubSpot"}]). If the user says "yes" but lists names, extract them. If "no" or none mentioned, empty array [].
+- competitors: Array of objects for each unique competitor mentioned. Each object must have a 'name' property with the competitor's name (e.g., [{"name": "Salesforce"}, {"name": "HubSpot"}]). If a competitor is mentioned, 'name' must be non-empty and exactly the extracted name. If the user says "yes" but lists names, extract each as a separate object. If "no", none mentioned, or irrelevant, use empty array [].
 - objections: Array of objection objects, one for each distinct objection. Each must have:
-  - type: A single-word summary (e.g., "Price", "Features", "Integration").
-  - description: Concise AI-generated summary of the objection in 1-2 sentences.
-  - address: Concise AI-generated summary of how it was overcome in 1-2 sentences.
-If the user says "yes" but describes objections and resolutions, extract and summarize them. If "no" or none mentioned, empty array [].
-Infer based on context after questions like "Were there any competitors?" and "Did you face any objections?". Handle lists, e.g., "Competitors were A, B, and C" → [{"name": "A"}, {"name": "B"}, {"name": "C"}]. For objections, e.g., "Objection was price too high, overcome by discount" → [{"type": "Price", "description": "Customer felt the price was too high.", "address": "Offered a discount to close the deal."}].
+  - type: A single-word summary (e.g., "Price", "Features", "Integration"). Must be non-empty if an objection is present.
+  - description: Concise AI-generated summary of the objection in 1-2 sentences. Must be non-empty and descriptive if data exists.
+  - address: Concise AI-generated summary of how it was overcome in 1-2 sentences. Must be non-empty if a resolution is mentioned; if not, summarize as "Not specified" or infer if possible.
+If the user says "yes" but describes objections and resolutions, extract, summarize, and ensure all fields are populated. If "no", none mentioned, or irrelevant, use empty array [].
+Infer based on context after questions like "Were there any competitors?" and "Did you face any objections?". Handle lists, e.g., "Competitors were A and B" → [{"name": "A"}, {"name": "B"}]. For objections, e.g., "Price was too high but we gave a discount; features were lacking but we demoed" → [{"type": "Price", "description": "Customer objected to the high price.", "address": "Overcame by offering a discount."}, {"type": "Features", "description": "Customer felt features were insufficient.", "address": "Overcame by providing a detailed demo."}].
 
 Output only the JSON object matching the schema; no additional text.`
         },
@@ -147,6 +147,9 @@ Output only the JSON object matching the schema; no additional text.`
         }
       }
     });
+
+    // Log the raw xAI response for debugging
+    console.log('xAI response:', completion.choices[0].message.content);
 
     // Parse the JSON response
     const jsonOutput = JSON.parse(completion.choices[0].message.content);
