@@ -84,7 +84,7 @@ wss.on('connection', (ws) => {
 // Endpoint to process transcript with xAI for JSON output
 app.post('/process-transcript', async (req, res) => {
   const { transcript, model } = req.body;
-  const selectedModel = model || 'grok-4-0709'; // Updated to a current model
+  const selectedModel = model || 'grok-4-1-fast-reasoning'; // Updated to current valid model
 
   if (!transcript) {
     return res.status(400).json({ error: 'Transcript is required' });
