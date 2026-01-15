@@ -84,7 +84,7 @@ wss.on('connection', (ws) => {
 // Endpoint to process transcript with xAI for JSON output
 app.post('/process-transcript', async (req, res) => {
   const { transcript, model } = req.body;
-  const selectedModel = model || 'grok-4-1-fast-reasoning'; // Updated to current valid model
+  const selectedModel = model || 'grok-4-1-fast-reasoning'; // Current valid model
 
   if (!transcript) {
     return res.status(400).json({ error: 'Transcript is required' });
@@ -122,9 +122,9 @@ app.post('/process-transcript', async (req, res) => {
           content: `You are a helpful assistant that extracts information from opportunity interview transcripts and outputs strictly in JSON format matching the provided schema.
 
 Extract from the transcript:
-- Full transcript as-is.
-- Competitors: Array of unique competitor names mentioned (e.g., "Salesforce", "HubSpot"). If none, empty array.
-- Objections: Array of objections with:
+- transcript: The full transcript as-is.
+- competitors: Array of objects for unique competitors mentioned, each with a 'name' property (e.g., [{"name": "Salesforce"}, {"name": "HubSpot"}]). If none, empty array [].
+- objections: Array of objection objects with:
   - type: A single-word summary (e.g., "Price", "Features").
   - description: Concise summary of the objection (<130,000 chars).
   - address: Concise summary of how it was overcome (<130,000 chars).
