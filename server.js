@@ -123,12 +123,13 @@ app.post('/process-transcript', async (req, res) => {
 
 Extract from the transcript:
 - transcript: The full transcript as-is.
-- competitors: Array of objects for unique competitors mentioned, each with a 'name' property (e.g., [{"name": "Salesforce"}, {"name": "HubSpot"}]). If none, empty array [].
-- objections: Array of objection objects with:
-  - type: A single-word summary (e.g., "Price", "Features").
-  - description: Concise summary of the objection (<130,000 chars).
-  - address: Concise summary of how it was overcome (<130,000 chars).
-If no competitors or objections, use empty arrays. Infer based on context after questions like "Were there any competitors?" and "Did you face any objections?".
+- competitors: Array of objects for each unique competitor mentioned. Each object must have a 'name' property with the competitor's name (e.g., [{"name": "Salesforce"}, {"name": "HubSpot"}]). If the user says "yes" but lists names, extract them. If "no" or none mentioned, empty array [].
+- objections: Array of objection objects, one for each distinct objection. Each must have:
+  - type: A single-word summary (e.g., "Price", "Features", "Integration").
+  - description: Concise AI-generated summary of the objection in 1-2 sentences.
+  - address: Concise AI-generated summary of how it was overcome in 1-2 sentences.
+If the user says "yes" but describes objections and resolutions, extract and summarize them. If "no" or none mentioned, empty array [].
+Infer based on context after questions like "Were there any competitors?" and "Did you face any objections?". Handle lists, e.g., "Competitors were A, B, and C" → [{"name": "A"}, {"name": "B"}, {"name": "C"}]. For objections, e.g., "Objection was price too high, overcome by discount" → [{"type": "Price", "description": "Customer felt the price was too high.", "address": "Offered a discount to close the deal."}].
 
 Output only the JSON object matching the schema; no additional text.`
         },
